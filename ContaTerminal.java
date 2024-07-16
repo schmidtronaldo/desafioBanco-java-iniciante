@@ -32,7 +32,7 @@ public class ContaTerminal {
         double saldo = random.nextDouble() * 500; // Saldo entre 0 e 500
 
         System.out.println("\nOlá " + nomeCliente.toUpperCase() + ", obrigado por criar uma conta em nosso banco.");
-        System.out.println("Sua agência é " + agencia + ", conta " + numero + " e seu saldo é R$" + saldo + ".");
+        System.out.println("Sua agência é " + agencia + ", conta " + numero + " e seu saldo é R$" + String.format("%.2f", saldo) + ".");
         System.out.println("Seu saldo já está disponível para saque.");
 
         scanner.close();
