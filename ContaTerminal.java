@@ -1,40 +1,64 @@
-import java.util.Scanner;
+
 import java.util.Random;
+import java.util.Scanner;
 
 public class ContaTerminal {
+    private static final int AGENCIA_LENGTH = 4;
+    private static final int CONTA_LENGTH = 6;
+    private static final double SALDO_MAXIMO = 500.0;
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
+        try (Scanner scanner = new Scanner(System.in)) {
+            Random random = new Random();
 
-        System.out.print("Por favor, digite o número da Agência (4 dígitos): ");
-        String agencia = scanner.nextLine();
+            String agencia = solicitarAgencia(scanner);
+            int numeroConta = solicitarNumeroConta(scanner);
+            String nomeCliente = solicitarNomeCliente(scanner);
+            double saldo = gerarSaldoAleatorio(random);
 
-        if (agencia.length() != 4 || !agencia.matches("[0-9]+")) {
-            System.out.println("Número de agência inválido. Digite exatamente 4 dígitos numéricos.");
-            scanner.close();
-            return;
+            exibirMensagemFinal(nomeCliente, agencia, numeroConta, saldo);
         }
+    }
 
-        System.out.print("Digite o número da conta (6 dígitos): ");
-        int numero = scanner.nextInt();
-        scanner.nextLine(); // Consumir a quebra de linha
+    private static String solicitarAgencia(Scanner scanner) {
+        while (true) {
+            System.out.print("Por favor, digite o número da Agência (" + AGENCIA_LENGTH + " dígitos): ");
+            String agencia = scanner.nextLine();
 
-        if (numero < 100000 || numero > 999999) {
-            System.out.println("Número de conta inválido. Digite exatamente 6 dígitos numéricos.");
-            scanner.close();
-            return;
+            if (agencia.length() == AGENCIA_LENGTH && agencia.matches("[0-9]+")) {
+                return agencia;
+            } else {
+                System.out.println("Número de agência inválido. Digite exatamente " + AGENCIA_LENGTH + " dígitos numéricos.");
+            }
         }
+    }
 
+    private static int solicitarNumeroConta(Scanner scanner) {
+        while (true) {
+            System.out.print("Digite o número da conta (" + CONTA_LENGTH + " dígitos): ");
+            String input = scanner.nextLine();
+
+            if (input.length() == CONTA_LENGTH && input.matches("[0-9]+")) {
+                return Integer.parseInt(input);
+            } else {
+                System.out.println("Número de conta inválido. Digite exatamente " + CONTA_LENGTH + " dígitos numéricos.");
+            }
+        }
+    }
+
+    private static String solicitarNomeCliente(Scanner scanner) {
         System.out.print("Digite o nome do cliente: ");
-        String nomeCliente = scanner.nextLine();
+        return scanner.nextLine();
+    }
 
-        System.out.println("Gerando saldo aleatório...");
-        double saldo = random.nextDouble() * 500; // Saldo entre 0 e 500
+    private static double gerarSaldoAleatorio(Random random) {
+        System.out.println("Verificando saldo ...");
+        return random.nextDouble() * SALDO_MAXIMO;
+    }
 
+    private static void exibirMensagemFinal(String nomeCliente, String agencia, int numeroConta, double saldo) {
         System.out.println("\nOlá " + nomeCliente.toUpperCase() + ", obrigado por criar uma conta em nosso banco.");
-        System.out.println("Sua agência é " + agencia + ", conta " + numero + " e seu saldo é R$" + String.format("%.2f", saldo) + ".");
+        System.out.println("Sua agência é " + agencia + ", conta " + numeroConta + " e seu saldo é R$" + String.format("%.2f", saldo) + ".");
         System.out.println("Seu saldo já está disponível para saque.");
-
-        scanner.close();
     }
 }
